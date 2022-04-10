@@ -13,15 +13,15 @@ Knowledge Distillation Papers in Pytorch
 ## Training Details
 We follow the settings of [CRD](https://github.com/HobbitLong/RepDistiller), name we train for 240 epochs with initial learning rate of 0.05, batch size 64, weight decay 5e-4, and momentum of 0.9. Learning rate is decayed by a factor of 10 at epochs 150, 180, and 210. 
 
+## Download Models
+All trained models can be found [here](https://drive.google.com/drive/folders/1gL8ensehP_JTkgNf2RNRkoDC2SXAznU-?usp=sharing).
+
 ## Baseline Models (without KD)
-Results are almost identical to that of [CRD](https://github.com/HobbitLong/RepDistiller). Slight differences may come as a result of using pre-activation ResNets.
-WRN40-2 - 75.34
-WRN40-1 - 71.81
-WRN28-4 - 78.31
-WRN16-4 - 76.60
-WRN16-2 - 72.39
-ResNet56 - 72.50
-ResNet20 - 69.27
+Slight improvements compared to the CRD repo may come as a result of using pre-activation ResNets.
+
+|                     | WRN40-2 | WRN40-1 | WRN28-4 | WRN16-4 | WRN16-2 | ResNet56 | ResNet20 | ResNet8 |
+|---------------------|---------|---------|---------|---------|---------|----------|----------|---------|
+| Baseline<br>(No KD) |  76.44  |  71.91  |  79.03  |  77.35  |  74.03  |  72.55   |  69.51   |  61.11  |
 
 ## KD Results
 TODO.

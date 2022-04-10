@@ -10,6 +10,9 @@ import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
 
+__all__ = ["resnet8", "resnet20", "resnet32", "resnet44", "resnet56", "wideresnet16_2", 
+            "wideresnet16_4", "wideresnet28_4", "wideresnet40_1", "wideresnet40_2"]
+
 class BasicBlock(nn.Module):
     """
     Pre-activation BasicBlock
@@ -84,6 +87,12 @@ class ResNet(nn.Module):
         x = self.linear(x)
         return [layer1, layer2, layer3], x
 
+
+def resnet8(num_classes=100, model_path=None):
+    model = ResNet(block=BasicBlock, n=1, num_classes=num_classes)
+    if model_path is not None:
+        model.load_state_dict(torch.load(model_path))
+    return model
 
 def resnet20(num_classes=100, model_path=None):
     model = ResNet(block=BasicBlock, n=3, num_classes=num_classes)
