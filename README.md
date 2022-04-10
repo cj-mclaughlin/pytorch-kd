@@ -11,7 +11,7 @@ Knowledge Distillation Papers in Pytorch
 - CRD: [Contrastive Representation Distillation](http://arxiv.org/abs/1910.10699)
 
 ## Training Details
-We follow the settings of [CRD](https://github.com/HobbitLong/RepDistiller), name we train for 240 epochs with initial learning rate of 0.05, batch size 64, weight decay 5e-4, and momentum of 0.9. Learning rate is decayed by a factor of 10 at epochs 150, 180, and 210. 
+We follow the settings of [CRD](https://github.com/HobbitLong/RepDistiller), namely, we train for 240 epochs with an initial learning rate of 0.05, batch size 64, weight decay 5e-4, and momentum of 0.9. We multiply the learning rate by 0.1 at epochs 150, 180, and 210. 
 
 ## Download Models
 All trained models can be found [here](https://drive.google.com/drive/folders/1gL8ensehP_JTkgNf2RNRkoDC2SXAznU-?usp=sharing).
