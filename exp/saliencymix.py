@@ -1,5 +1,5 @@
 """
-Baseline training procedure
+SaliencyMix Training https://arxiv.org/abs/2006.01791
 """
 import sys, os
 sys.path.insert(0, os.path.abspath('.'))
@@ -51,7 +51,6 @@ def train(model, dataloader, optimizer, epoch=0):
             i += 1
         i = 0
 
-
 def evaluate(model, dataloader):
     total = 0
     correct = 0
@@ -68,20 +67,3 @@ def evaluate(model, dataloader):
     accuracy = 100 * correct / total
     print(f"Test accuracy: {accuracy}")
     return accuracy
-
-if __name__ == "__main__":
-    wrn40_2 = wideresnet40_2().cuda()
-    wrn40_1 = wideresnet40_1().cuda()
-    wrn28_4 = wideresnet28_4().cuda()
-    wrn16_4 = wideresnet16_4().cuda()
-    wrn16_2 = wideresnet16_2().cuda()
-    resnet8 = resnet8().cuda()
-    resnet20 = resnet20().cuda()
-    resnet56 = resnet56().cuda()
-    model_dict = { "wrn40_2": wrn40_2, "wrn40_1": wrn40_1, "wrn28_4": wrn28_4, "wrn16_4": wrn16_4, "wrn16_2": wrn16_2, "resnet8": resnet8, "resnet20": resnet20, "resnet56": resnet56 }
-    results_dict = { "wrn40_2": 0, "wrn40_1": 0, "wrn28_4": 0, "wrn16_4": 0, "wrn16_2": 0, "resnet8": 0, "resnet20": 0, "resnet56": 0 }
-    for model_name in model_dict.keys():
-        model = model_dict[model_name]
-        result = main(model, num_epochs=240, save_path=f"{model_name}.pth")
-        results_dict[model_name] = result
-    print(results_dict)
