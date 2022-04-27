@@ -41,6 +41,6 @@ def evaluate_cifar100c(model):
     return results
 
 if __name__ == "__main__":
-    model = wideresnet40_2(model_path="models/pretrained/wrn40_2.pth").cuda()
+    model = wideresnet40_2(model_path="models/pretrained/wrn40_2_salmix.pth").cuda()
     results = evaluate_cifar100c(model)
     print(results)

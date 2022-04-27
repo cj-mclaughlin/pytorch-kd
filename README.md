@@ -1,9 +1,10 @@
 # pytorch-kd
-This re
+This repo aims to reproduce a wide range of works in literature, primarily those on knowledge distillation.
 
 ## Target Papers
 
 ### Knowledge Distillation
+(In Progress)
 - KD: [Distilling the Knowledge in a Neural Network](https://arxiv.org/abs/1503.02531)
 - FitNets: [FitNets: Hints for Thin Deep nets](https://arxiv.org/abs/1412.6550)
 - AT: [Paying More Attention to Attention: Improving the Performance of Convolutional Neural Networks via Attention Transfer](https://arxiv.org/abs/1612.03928)
@@ -13,7 +14,6 @@ This re
 
 ### Robustness/Augmentation
 - SaliencyMix: [SaliencyMix: A Saliency Guided Data Augmentation Strategy for Better Regularization](https://arxiv.org/abs/2006.01791)
-- Others :)
 
 ## Training Details
 This repo follows settings of [CRD](https://github.com/HobbitLong/RepDistiller), namely we train for 240 epochs with initial learning rate of 0.05, batch size 64, weight decay 5e-4, and momentum of 0.9. Learning rate is decayed by a factor of 10 at epochs 150, 180, and 210. 
@@ -34,7 +34,7 @@ Models may also be evaluated on the [CIFAR100-Corrupted benchmark](https://arxiv
 | WRN40-2             | CIFAR100 | CIFAR100C |
 |---------------------|----------|-----------|
 | Baseline            |  76.44   |  48.12    |
-| SaliencyMix         |          |           |
+| SaliencyMix         |  78.26   |  49.06    |
 
 ## KD Results
 TODO.

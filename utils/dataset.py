@@ -1,14 +1,10 @@
 from torchvision.datasets import CIFAR10, CIFAR100
-from torchvision import transforms
 from torch.utils.data import DataLoader, Dataset
 import torch
 import numpy as np
+from utils.transforms import *
 
 __all__= ['get_cifar100_iterator']
-
-# Statistics from CIFAR100 training set
-CIFAR100_mean = np.array([129.30, 124.07, 112.43]) / 255.0
-CIFAR100_std = np.array([68.17, 65.39, 70.42]) / 255.0
 
 # Categories of augmentation for CIFAR100C
 CORRUPTED_CATEGORIES = [
@@ -17,20 +13,6 @@ CORRUPTED_CATEGORIES = [
     "jpeg_compression", "motion_blur", "pixelate", "saturate", "shot_noise",
     "snow", "spatter", "speckle_noise", "zoom_blur"
 ]
-
-# Baseline augmentation policy for CIFAR100
-train_transform = transforms.Compose([
-    transforms.Pad(4, padding_mode='reflect'),
-    transforms.RandomHorizontalFlip(),
-    transforms.RandomCrop(size=32),
-    transforms.ToTensor(),
-    transforms.Normalize(mean=CIFAR100_mean, std=CIFAR100_std)
-])
-
-test_transform = transforms.Compose([
-    transforms.ToTensor(),
-    transforms.Normalize(mean=CIFAR100_mean, std=CIFAR100_std)
-])
 
 class CIFAR100C(Dataset):
     """

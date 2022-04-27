@@ -7,12 +7,18 @@ sys.path.insert(1, os.path.abspath('..'))
 
 from utils.dataset import baseline_cifar100_dataloader
 from utils.optimizer import get_default_optim, decay_lr
+from utils.transforms import saliency_bbox
 from models.resnet import *
 from torch.nn import CrossEntropyLoss
 import torch
 from tqdm import tqdm
+import numpy as np
 
 torch.backends.cudnn.benchmark = True
+
+# default parameters from saliencymix repo
+MIX_PROB = 0.5
+BETA = 1
 
 def main(model, num_epochs=240, save_path=""):
     optimizer = get_default_optim(model)
@@ -28,7 +34,7 @@ def main(model, num_epochs=240, save_path=""):
 
 def train(model, dataloader, optimizer, epoch=0):
     model.train()
-    criterion = CrossEntropyLoss()
+    criterion = CrossEntropyLoss().cuda()
     
     i = 0
     with tqdm(dataloader, unit="batch") as tepoch:
@@ -36,10 +42,27 @@ def train(model, dataloader, optimizer, epoch=0):
         for input, target in tepoch:
             input = input.cuda(non_blocking=True)
             target = target.cuda(non_blocking=True)
-        
+
             optimizer.zero_grad()
-            _, outputs = model(input)
-            loss = criterion(outputs, target)
+            r = np.random.rand(1)
+            if r > MIX_PROB:
+                # generate mixed sample
+                lam = np.random.beta(BETA, BETA)
+                rand_index = torch.randperm(input.size()[0]).cuda()
+                labels_a = target
+                labels_b = target[rand_index]
+                bbx1, bby1, bbx2, bby2 = saliency_bbox(input[rand_index[0]], lam)
+                input[:, :, bbx1:bbx2, bby1:bby2] = input[rand_index, :, bbx1:bbx2, bby1:bby2]
+                lam = 1 - ((bbx2 - bbx1) * (bby2 - bby1) / (input.size()[-1] * input.size()[-2]))
+
+                # compute loss on mixed sample
+                _, outputs = model(input)
+                loss = criterion(outputs, labels_a)* lam + criterion(outputs, labels_b) * (1. - lam)
+            else:
+                # normal un-mixed sample
+                _, outputs = model(input)
+                loss = criterion(outputs, target)
+            
             loss.backward()
             optimizer.step()
 
@@ -67,3 +90,13 @@ def evaluate(model, dataloader):
     accuracy = 100 * correct / total
     print(f"Test accuracy: {accuracy}")
     return accuracy
+
+if __name__ == "__main__":
+    wrn40_2 = wideresnet40_2().cuda()
+    model_dict = { "wrn40_2": wrn40_2}
+    results_dict = { "wrn40_2": 0 }
+    for model_name in model_dict.keys():
+        model = model_dict[model_name]
+        result = main(model, num_epochs=240, save_path=f"{model_name}_salmix.pth")
+        results_dict[model_name] = result
+    print(results_dict)
