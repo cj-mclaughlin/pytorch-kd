@@ -7,7 +7,7 @@ sys.path.insert(1, os.path.abspath('..'))
 
 from utils.dataset import baseline_cifar100_dataloader
 from utils.optimizer import get_default_optim, decay_lr
-from models.resnet import *
+import models.resnet
 from torch.nn import CrossEntropyLoss
 import torch
 from tqdm import tqdm
@@ -69,19 +69,22 @@ def evaluate(model, dataloader):
     print(f"Test accuracy: {accuracy}")
     return accuracy
 
+import sys
 if __name__ == "__main__":
-    wrn40_2 = wideresnet40_2().cuda()
-    wrn40_1 = wideresnet40_1().cuda()
-    wrn28_4 = wideresnet28_4().cuda()
-    wrn16_4 = wideresnet16_4().cuda()
-    wrn16_2 = wideresnet16_2().cuda()
-    resnet8 = resnet8().cuda()
-    resnet20 = resnet20().cuda()
-    resnet56 = resnet56().cuda()
-    model_dict = { "wrn40_2": wrn40_2, "wrn40_1": wrn40_1, "wrn28_4": wrn28_4, "wrn16_4": wrn16_4, "wrn16_2": wrn16_2, "resnet8": resnet8, "resnet20": resnet20, "resnet56": resnet56 }
-    results_dict = { "wrn40_2": 0, "wrn40_1": 0, "wrn28_4": 0, "wrn16_4": 0, "wrn16_2": 0, "resnet8": 0, "resnet20": 0, "resnet56": 0 }
+    try:
+        print(f"Trying to read model name from arguments.")
+        model_name = sys.argv[1]
+        model = getattr(models.resnet, model_name)().cuda()
+    except:
+        model_name = "wideresnet40_2"
+        print(f"Could not parse model name. Training default model: {model_name}.")
+        model = getattr(models.resnet, model_name)().cuda()
+   
+    model_dict = { model_name: model }
+    results_dict = { model_name: 0 }
     for model_name in model_dict.keys():
         model = model_dict[model_name]
         result = main(model, num_epochs=240, save_path=f"{model_name}.pth")
         results_dict[model_name] = result
+    
     print(results_dict)

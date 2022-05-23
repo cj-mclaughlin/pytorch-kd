@@ -1,5 +1,5 @@
 # pytorch-kd
-This repo aims to reproduce a wide range of works in literature, primarily those on knowledge distillation.
+This repo aims to reproduce a wide range of works in literature in knowledge distillation.
 
 ## Target Papers
 
@@ -22,11 +22,16 @@ This repo follows settings of [CRD](https://github.com/HobbitLong/RepDistiller),
 All trained models can be found [here](https://drive.google.com/drive/folders/1gL8ensehP_JTkgNf2RNRkoDC2SXAznU-?usp=sharing).
 
 ## Baseline Models
-Slight improvements compared to the CRD repo may come as a result of using pre-activation ResNets.
 
-|                     | WRN40-2 | WRN40-1 | WRN28-4 | WRN16-4 | WRN16-2 | ResNet56 | ResNet20 | ResNet8 |
-|---------------------|---------|---------|---------|---------|---------|----------|----------|---------|
-| Baseline            |  76.44  |  71.91  |  79.03  |  77.35  |  74.03  |  72.55   |  69.51   |  61.11  |
+Wide Residual Networks
+|                     | WRN40-2 | WRN40-1 | WRN28-4 | WRN16-4 | WRN16-2 | WRN16-1 |
+|---------------------|---------|---------|---------|---------|---------|---------|
+| Baseline            |  76.44  |  71.91  |  79.03  |  77.35  |  74.03  |  67.85  |
+
+ResNet (pre-activation)
+|                     | ResNet56 | ResNet20 | ResNet8 |
+|---------------------|----------|----------|---------|
+| Baseline            |  72.55   |  69.51   |  61.11  |
 
 ## Results on CIFAR100C
 Models may also be evaluated on the [CIFAR100-Corrupted benchmark](https://arxiv.org/abs/1903.12261) to evaluate the robustness of each training method. Below shows the performance of WRN40-2 on clean and corrupted CIFAR with varying training schemes.
@@ -35,6 +40,6 @@ Models may also be evaluated on the [CIFAR100-Corrupted benchmark](https://arxiv
 |---------------------|----------|-----------|
 | Baseline            |  76.44   |  48.12    |
 | SaliencyMix         |  78.26   |  49.06    |
-
+!
 ## KD Results
 TODO.
